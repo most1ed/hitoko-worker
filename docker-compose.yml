@@ -33,7 +33,11 @@ services:
     networks:
       - hitoko-network
 
-  # Auto-reply bot (optional, commented out by default)
+  # Auto-reply bot (DISABLED by default for safety)
+  # ⚠️  WARNING: Only enable if you have tested thoroughly!
+  # See docs/AUTO-REPLY-WARNING.md before uncommenting
+  #
+  # To enable: uncomment the lines below
   # auto-reply:
   #   build:
   #     context: .

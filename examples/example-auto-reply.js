@@ -3,10 +3,19 @@
 /**
  * Example: Auto-reply bot that responds to customer messages
  *
+ * ⚠️  WARNING: This is a SEPARATE script from the main worker!
+ *
+ * Auto-reply is DISABLED by default in the main worker (index.js).
+ * To use auto-reply, you must explicitly run this script:
+ *   npm run auto-reply
+ *
  * This demonstrates how to:
  * 1. Listen to incoming messages from MQTT
  * 2. Parse message content
  * 3. Automatically send a reply
+ *
+ * IMPORTANT: Test thoroughly before using in production!
+ * Make sure your auto-reply logic is appropriate for your use case.
  */
 
 const HitokoAPI = require('../src/hitoko-api');

@@ -216,19 +216,31 @@ Send a message to your Shopee shop, and you'll see:
 
 ## Auto-Reply Bot
 
-The included auto-reply bot (`example-auto-reply.js`) demonstrates how to automatically respond to customer messages:
+⚠️ **IMPORTANT: Auto-reply is DISABLED by default!**
+
+The main worker (`npm run worker`) only forwards messages to your webhook. It does **NOT** automatically reply to customers.
+
+### Optional: Enable Auto-Reply
+
+If you want to automatically respond to customer messages, you can run the separate auto-reply bot:
 
 ```bash
 npm run auto-reply
 ```
 
-The bot will:
-- Listen for messages from customers (buyers)
-- Detect keywords in messages (price, stock, shipping, etc.)
-- Automatically send appropriate replies
-- Show reply commands in the console
+This is a **completely separate script** that:
+- Listens for messages from customers (buyers)
+- Detects keywords in messages (price, stock, shipping, etc.)
+- Automatically sends appropriate replies
+- Shows reply commands in the console
 
-You can customize the auto-reply logic in `example-auto-reply.js` to fit your needs.
+⚠️ **Before using in production:**
+1. Test thoroughly with your actual message flow
+2. Customize the auto-reply logic in `examples/example-auto-reply.js`
+3. Make sure responses are appropriate for your business
+4. Consider having a human review auto-responses periodically
+
+**Note:** The auto-reply bot runs independently from the main worker. You can run both simultaneously if needed.
 
 ## Binary Message Format
 
