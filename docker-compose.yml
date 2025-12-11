@@ -33,24 +33,6 @@ services:
     networks:
       - hitoko-network
 
-  # Auto-reply bot (DISABLED by default for safety)
-  # ⚠️  WARNING: Only enable if you have tested thoroughly!
-  # See docs/AUTO-REPLY-WARNING.md before uncommenting
-  #
-  # To enable: uncomment the lines below
-  # auto-reply:
-  #   build:
-  #     context: .
-  #     target: auto-reply
-  #   container_name: hitoko-auto-reply
-  #   restart: unless-stopped
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - NODE_ENV=production
-  #   networks:
-  #     - hitoko-network
-
 networks:
   hitoko-network:
     driver: bridge

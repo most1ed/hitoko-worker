@@ -39,7 +39,6 @@ hitoko-pusher/
 │   ├── message-parser.js     # Message parsing utilities
 │   └── webhook-forwarder.js  # Webhook forwarding logic
 ├── examples/                 # Example implementations
-│   ├── example-auto-reply.js       # Auto-reply bot
 │   └── example-webhook-handler.js  # Webhook receiver
 ├── docs/                     # Documentation
 │   ├── BINARY-FORMAT.md      # Binary message format
@@ -171,7 +170,6 @@ curl -X POST http://localhost:3001/api/reply/image \
 - `npm start` - Start the worker (same as `npm run worker`)
 - `npm run worker` - Start the MQTT worker (forwards messages to webhook)
 - `npm run server` - Start the HTTP API server (for sending replies)
-- `npm run auto-reply` - Start the auto-reply bot (automatically responds to customers)
 - `npm run webhook` - Start example webhook handler (receives messages on port 3000)
 
 ## Testing the Complete Flow
@@ -213,34 +211,6 @@ Send a message to your Shopee shop, and you'll see:
    - Parses the message payload
    - Logs the message details
    - Forwards to the configured webhook with retry logic
-
-## Auto-Reply Bot
-
-⚠️ **IMPORTANT: Auto-reply is DISABLED by default!**
-
-The main worker (`npm run worker`) only forwards messages to your webhook. It does **NOT** automatically reply to customers.
-
-### Optional: Enable Auto-Reply
-
-If you want to automatically respond to customer messages, you can run the separate auto-reply bot:
-
-```bash
-npm run auto-reply
-```
-
-This is a **completely separate script** that:
-- Listens for messages from customers (buyers)
-- Detects keywords in messages (price, stock, shipping, etc.)
-- Automatically sends appropriate replies
-- Shows reply commands in the console
-
-⚠️ **Before using in production:**
-1. Test thoroughly with your actual message flow
-2. Customize the auto-reply logic in `examples/example-auto-reply.js`
-3. Make sure responses are appropriate for your business
-4. Consider having a human review auto-responses periodically
-
-**Note:** The auto-reply bot runs independently from the main worker. You can run both simultaneously if needed.
 
 ## Binary Message Format
 

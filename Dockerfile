@@ -38,7 +38,3 @@ CMD ["npm", "run", "worker"]
 FROM base AS server
 EXPOSE 3001
 CMD ["npm", "run", "server"]
-
-# Auto-reply bot image
-FROM base AS auto-reply
-CMD ["npm", "run", "auto-reply"]

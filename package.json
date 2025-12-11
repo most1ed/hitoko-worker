@@ -6,7 +6,6 @@
     "start": "node index.js",
     "server": "node server.js",
     "worker": "node index.js",
-    "auto-reply": "node examples/example-auto-reply.js",
     "webhook": "node examples/example-webhook-handler.js",
     "test:server": "bash scripts/test-server.sh",
     "test": "echo \"Run 'npm run test:server' to test the API server\""

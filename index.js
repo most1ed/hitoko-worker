@@ -4,10 +4,7 @@
  * Hitoko Pusher - Main Worker
  *
  * This worker listens to MQTT messages and forwards them to your webhook.
- * It does NOT auto-reply to messages.
- *
- * To enable auto-reply, run the separate auto-reply bot:
- *   npm run auto-reply
+ * It does NOT automatically reply to messages.
  */
 
 const HitokoAPI = require('./src/hitoko-api');
