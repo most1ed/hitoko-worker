@@ -1,0 +1,13 @@
+name: CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master", "development", "develop" ]
+    tags: [ '*.*.*' ]
+
+
+jobs:
+  build-and-deploy:
+    uses: most1ed/cicd/.github/workflows/default.yml@main
+    secrets: inherit
