@@ -19,6 +19,7 @@ class HitokoPusher {
     this.webhookForwarder = new WebhookForwarder();
     this.mqttClient = null;
     this.shopInfo = null;
+    this.processedMessages = new Map(); // For deduplication
   }
 
   async initialize() {
@@ -74,6 +75,23 @@ class HitokoPusher {
   }
 
   async handleMessage(messageData) {
+    // Extract messageId for deduplication
+    const messageId = messageData?.payload?.parsed?.compChatMessageVO?.messageId;
+
+    if (messageId) {
+      if (this.processedMessages.has(messageId)) {
+        console.log(`\n⏭️  Skipping duplicate message: ${messageId}`);
+        return;
+      }
+      this.processedMessages.set(messageId, Date.now());
+
+      // Clean up old entries (keep last 5 minutes)
+      const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+      for (const [id, timestamp] of this.processedMessages) {
+        if (timestamp < fiveMinutesAgo) this.processedMessages.delete(id);
+      }
+    }
+
     console.log('\n' + '─'.repeat(60));
     console.log('📥 New Message Received');
     console.log('─'.repeat(60));
