@@ -94,12 +94,23 @@ HITOKO_WS_URL=wss://www.hitoko.co.id/erp/ws-mqtt/mqtt
 SHOP_ID=your_shop_id
 MARKETPLACE_CODE=00
 
-# Webhook Configuration
+# Webhook Configuration (single or multiple comma-separated)
 WEBHOOK_URL=http://your-webhook-endpoint.com/webhook
+# Multiple webhooks: WEBHOOK_URL=http://webhook1.com,http://webhook2.com
 
 # Server Configuration
 SERVER_PORT=3001
 ```
+
+### Multiple Webhooks
+
+You can forward messages to multiple webhook endpoints simultaneously by separating URLs with commas:
+
+```env
+WEBHOOK_URL=https://test.example.com/hook,https://prod.example.com/hook
+```
+
+Messages will be sent to all webhooks **in parallel**. See [docs/MULTIPLE-WEBHOOKS.md](docs/MULTIPLE-WEBHOOKS.md) for details.
 
 ## Usage
 

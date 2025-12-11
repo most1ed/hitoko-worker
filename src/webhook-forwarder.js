@@ -3,16 +3,26 @@ require('dotenv').config();
 
 class WebhookForwarder {
   constructor(webhookUrl) {
-    this.webhookUrl = webhookUrl || process.env.WEBHOOK_URL;
+    const urlString = webhookUrl || process.env.WEBHOOK_URL;
+
+    // Support multiple webhook URLs separated by comma
+    this.webhookUrls = urlString
+      ? urlString.split(',').map(url => url.trim()).filter(url => url)
+      : [];
+
     this.retryAttempts = 3;
     this.retryDelay = 1000; // 1 second
+
+    if (this.webhookUrls.length === 0) {
+      console.warn('⚠️  No webhook URLs configured');
+    } else if (this.webhookUrls.length > 1) {
+      console.log(`📡 Configured ${this.webhookUrls.length} webhook endpoints`);
+    }
   }
 
-  async forward(messageData, retryCount = 0) {
+  async forwardToSingleWebhook(url, messageData, retryCount = 0) {
     try {
-      console.log(`\n🔄 Forwarding message to webhook: ${this.webhookUrl}`);
-
-      const response = await axios.post(this.webhookUrl, messageData, {
+      const response = await axios.post(url, messageData, {
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'Hitoko-Pusher/1.0'
@@ -20,32 +30,66 @@ class WebhookForwarder {
         timeout: 10000
       });
 
-      console.log('✓ Message forwarded successfully');
-      console.log('Response status:', response.status);
-
       return {
         success: true,
+        url: url,
         status: response.status,
         data: response.data
       };
     } catch (error) {
-      console.error(`✗ Error forwarding message (attempt ${retryCount + 1}/${this.retryAttempts}):`, error.message);
-
       // Retry logic
       if (retryCount < this.retryAttempts - 1) {
         const delay = this.retryDelay * Math.pow(2, retryCount); // Exponential backoff
-        console.log(`Retrying in ${delay}ms...`);
-
         await new Promise(resolve => setTimeout(resolve, delay));
-        return this.forward(messageData, retryCount + 1);
+        return this.forwardToSingleWebhook(url, messageData, retryCount + 1);
       }
 
       return {
         success: false,
+        url: url,
         error: error.message,
-        messageData
+        status: error.response?.status
       };
     }
+  }
+
+  async forward(messageData) {
+    if (this.webhookUrls.length === 0) {
+      console.warn('⚠️  No webhook URLs configured, skipping forward');
+      return {
+        success: false,
+        error: 'No webhook URLs configured'
+      };
+    }
+
+    console.log(`\n🔄 Forwarding message to ${this.webhookUrls.length} webhook(s)...`);
+
+    // Forward to all webhooks in parallel
+    const results = await Promise.all(
+      this.webhookUrls.map(url => this.forwardToSingleWebhook(url, messageData))
+    );
+
+    // Log results
+    results.forEach(result => {
+      if (result.success) {
+        console.log(`✅ ${result.url} - Status: ${result.status}`);
+      } else {
+        console.error(`❌ ${result.url} - Error: ${result.error}`);
+      }
+    });
+
+    const successful = results.filter(r => r.success).length;
+    const failed = results.length - successful;
+
+    console.log(`\n📊 Results: ${successful}/${results.length} succeeded, ${failed} failed`);
+
+    return {
+      success: successful > 0, // Success if at least one webhook succeeded
+      total: results.length,
+      successful,
+      failed,
+      results
+    };
   }
 
   async forwardBatch(messages) {
