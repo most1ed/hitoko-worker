@@ -1,0 +1,29 @@
+{
+  "name": "hitoko-pusher",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "node server.js",
+    "worker": "node index.js",
+    "auto-reply": "node examples/example-auto-reply.js",
+    "webhook": "node examples/example-webhook-handler.js",
+    "test:server": "bash scripts/test-server.sh",
+    "test": "echo \"Run 'npm run test:server' to test the API server\""
+  },
+  "keywords": [
+    "hitoko",
+    "webhook",
+    "mqtt",
+    "message-forwarder"
+  ],
+  "author": "",
+  "license": "ISC",
+  "description": "Worker to listen to Hitoko real-time messages via MQTT and forward them to a webhook",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mqtt": "^5.14.1"
+  }
+}
